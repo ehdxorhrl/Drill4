@@ -73,8 +73,13 @@ while running:
     update_canvas()
     handle_events()
     frame = (frame + 1) % 5
+
     x += dir * 10
+    if x < 75 or x > TUK_WIDTH - 75:
+        x -= dir * 10
     y += up * 5
+    if y < 75 or y > TUK_HEIGHT - 75:
+        y -= up * 5
     delay(0.05)
 
 close_canvas()
