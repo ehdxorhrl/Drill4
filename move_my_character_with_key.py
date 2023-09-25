@@ -13,7 +13,7 @@ character = load_image("character.png")
 
 
 def handle_events():
-    global running, dir, state
+    global running, dir, state, x, y
 
     # fill here
 
@@ -40,6 +40,7 @@ def handle_events():
 sx, sy = TUK_WIDTH // 2, TUK_HEIGHT // 2
 running = True
 x = 800 // 2
+y = 90
 frame = 0
 dir = 0
 state = 1
@@ -52,11 +53,13 @@ while running:
         if dir == 0:
             character.clip_composite_draw(95 + (frame + 1) * 4, 2 + (frame + 1) * 46, 50, 46, 0, 'h', x, 90, 150, 150)
         else:
-            # character.clip_composite_draw(155 + frame * 4, frame * 55, 50, 45, 0, 'h', x, 90, 150, 150)
             character.clip_composite_draw(157, 22 + (frame + 1) * 42, 50, 42, 0, 'h', x, 90, 150, 150)
 
     elif state == 1:
-        character.clip_draw(100, 45, 50, 50, x, 90, 150, 150)
+        if dir == 0:
+            character.clip_draw(95 + (frame + 1) * 4, 2 + (frame + 1) * 46, 50, 46, x, 90, 150, 150)
+        else:
+            character.clip_draw(157, 22 + (frame + 1) * 42, 50, 42, x, 90, 150, 150)
     update_canvas()
     handle_events()
     frame = (frame + 1) % 5
