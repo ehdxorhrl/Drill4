@@ -13,7 +13,7 @@ character = load_image("character.png")
 
 
 def handle_events():
-    global running, dir, state, x, y
+    global running, dir, state, x, y, up
 
     # fill here
 
@@ -30,11 +30,19 @@ def handle_events():
                 state = -1
             elif event.key == SDLK_ESCAPE:
                 running = False
+            elif event.key == SDLK_UP:
+                up += 1
+            elif event.key == SDLK_DOWN:
+                up -= 1
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
                 dir -= 1
             elif event.key == SDLK_LEFT:
                 dir += 1
+            elif event.key == SDLK_UP:
+                up -= 1
+            elif event.key == SDLK_DOWN:
+                up += 1
         # fill here
 
 sx, sy = TUK_WIDTH // 2, TUK_HEIGHT // 2
@@ -44,26 +52,29 @@ y = 90
 frame = 0
 dir = 0
 state = 1
+up = 0
 
 # fill here
 while running:
     clear_canvas()
     tuk_ground.draw(sx, sy)
     if state == -1:
-        if dir == 0:
-            character.clip_composite_draw(95 + (frame + 1) * 4, 2 + (frame + 1) * 46, 50, 46, 0, 'h', x, 90, 150, 150)
-        else:
-            character.clip_composite_draw(157, 22 + (frame + 1) * 42, 50, 42, 0, 'h', x, 90, 150, 150)
+        if dir == -1 or up == -1 or up == 1:  # move_left
+            character.clip_composite_draw(157, 22 + (frame + 1) * 42, 50, 42, 0, 'h', x, y, 150, 150)
+        elif dir == 0:  # stop
+            character.clip_composite_draw(95 + (frame + 1) * 4, 2 + (frame + 1) * 46, 50, 46, 0, 'h', x, y, 150, 150)
 
     elif state == 1:
-        if dir == 0:
-            character.clip_draw(95 + (frame + 1) * 4, 2 + (frame + 1) * 46, 50, 46, x, 90, 150, 150)
-        else:
-            character.clip_draw(157, 22 + (frame + 1) * 42, 50, 42, x, 90, 150, 150)
+        if dir == 1 or up == 1 or up == -1:  # move_left
+            character.clip_draw(157, 22 + (frame + 1) * 42, 50, 42, x, y, 150, 150)
+        elif dir == 0:  # stop
+            character.clip_draw(95 + (frame + 1) * 4, 2 + (frame + 1) * 46, 50, 46, x, y, 150, 150)
+
     update_canvas()
     handle_events()
     frame = (frame + 1) % 5
-    x += dir * 5
+    x += dir * 10
+    y += up * 5
     delay(0.05)
 
 close_canvas()
